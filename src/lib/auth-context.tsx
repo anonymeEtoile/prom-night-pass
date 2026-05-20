@@ -33,7 +33,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
       // Defer role fetch to avoid deadlocks
       setTimeout(() => {
@@ -59,7 +61,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <Ctx.Provider value={{ session, user: session?.user ?? null, isSuperAdmin, loading, refreshRole, signOut }}>
+    <Ctx.Provider
+      value={{ session, user: session?.user ?? null, isSuperAdmin, loading, refreshRole, signOut }}
+    >
       {children}
     </Ctx.Provider>
   );

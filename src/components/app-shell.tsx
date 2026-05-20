@@ -1,5 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Ticket, Users, ScanLine, ShieldCheck, LogOut, Wifi, WifiOff } from "lucide-react";
+import {
+  LayoutDashboard,
+  Ticket,
+  Users,
+  ScanLine,
+  ShieldCheck,
+  LogOut,
+  Wifi,
+  WifiOff,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { Button } from "@/components/ui/button";

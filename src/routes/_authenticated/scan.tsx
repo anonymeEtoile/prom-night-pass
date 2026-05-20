@@ -26,14 +26,25 @@ function ScanPage() {
   const handleToken = async (token: string) => {
     // Debounce duplicate fast scans
     const now = Date.now();
-    if (lastScanRef.current && lastScanRef.current.token === token && now - lastScanRef.current.at < 3000) return;
+    if (
+      lastScanRef.current &&
+      lastScanRef.current.token === token &&
+      now - lastScanRef.current.at < 3000
+    )
+      return;
     lastScanRef.current = { token, at: now };
 
     // Check scan_settings
     const { data: setting } = await supabase
-      .from("scan_settings").select("scan_enabled").eq("id", 1).maybeSingle();
+      .from("scan_settings")
+      .select("scan_enabled")
+      .eq("id", 1)
+      .maybeSingle();
     if (!setting?.scan_enabled) {
-      setResult({ kind: "err", message: "Le scan n'est pas activé. Activez-le depuis le tableau de bord." });
+      setResult({
+        kind: "err",
+        message: "Le scan n'est pas activé. Activez-le depuis le tableau de bord.",
+      });
       return;
     }
 
@@ -48,7 +59,10 @@ function ScanPage() {
       return;
     }
     if (student.scanned) {
-      setResult({ kind: "err", message: `Billet déjà utilisé (${student.prenom} ${student.nom}).` });
+      setResult({
+        kind: "err",
+        message: `Billet déjà utilisé (${student.prenom} ${student.nom}).`,
+      });
       return;
     }
 
@@ -79,35 +93,51 @@ function ScanPage() {
       await inst.start(
         { facingMode: "environment" },
         { fps: 10, qrbox: { width: 260, height: 260 } },
-        (decoded) => { handleToken(decoded); },
-        () => {}
+        (decoded) => {
+          handleToken(decoded);
+        },
+        () => {},
       );
       setActive(true);
     } catch (e) {
-      setResult({ kind: "err", message: "Impossible d'accéder à la caméra. Vérifiez les permissions." });
+      setResult({
+        kind: "err",
+        message: "Impossible d'accéder à la caméra. Vérifiez les permissions.",
+      });
       console.error(e);
     }
   };
 
   const stop = async () => {
     if (scannerRef.current) {
-      try { await scannerRef.current.stop(); } catch {}
-      try { await scannerRef.current.clear(); } catch {}
+      try {
+        await scannerRef.current.stop();
+      } catch (e) {
+        // Ignore stop errors if scanner already stopped
+      }
+      try {
+        await scannerRef.current.clear();
+      } catch (e) {
+        // Ignore clear errors if scanner already cleared
+      }
       scannerRef.current = null;
     }
     setActive(false);
   };
 
   useEffect(() => {
-    return () => { stop(); };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      stop();
+    };
   }, []);
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
       <div>
         <h1 className="text-2xl font-semibold">Scanner les billets</h1>
-        <p className="text-sm text-muted-foreground">Pointez la caméra vers le QR code du billet.</p>
+        <p className="text-sm text-muted-foreground">
+          Pointez la caméra vers le QR code du billet.
+        </p>
       </div>
 
       <Card>
@@ -115,16 +145,26 @@ function ScanPage() {
           <div id={containerId} className="overflow-hidden rounded-md bg-black aspect-square" />
           <div className="mt-3 flex justify-center">
             {!active ? (
-              <Button onClick={start}><Camera className="mr-2 h-4 w-4" /> Démarrer le scan</Button>
+              <Button onClick={start}>
+                <Camera className="mr-2 h-4 w-4" /> Démarrer le scan
+              </Button>
             ) : (
-              <Button variant="outline" onClick={stop}><CameraOff className="mr-2 h-4 w-4" /> Arrêter</Button>
+              <Button variant="outline" onClick={stop}>
+                <CameraOff className="mr-2 h-4 w-4" /> Arrêter
+              </Button>
             )}
           </div>
         </CardContent>
       </Card>
 
       {result && (
-        <Card className={result.kind === "ok" ? "border-success bg-success/10" : "border-destructive bg-destructive/10"}>
+        <Card
+          className={
+            result.kind === "ok"
+              ? "border-success bg-success/10"
+              : "border-destructive bg-destructive/10"
+          }
+        >
           <CardContent className="p-6">
             {result.kind === "ok" ? (
               <div className="flex items-start gap-3">
@@ -132,9 +172,19 @@ function ScanPage() {
                 <div>
                   <div className="text-xl font-semibold text-success">Billet validé</div>
                   <div className="mt-2 text-base">
-                    <div><span className="text-muted-foreground">Élève :</span> <strong>{result.prenom} {result.nom}</strong></div>
-                    <div><span className="text-muted-foreground">Classe :</span> {result.classe}</div>
-                    <div><span className="text-muted-foreground">Payé :</span> {result.montant.toFixed(2)} €</div>
+                    <div>
+                      <span className="text-muted-foreground">Élève :</span>{" "}
+                      <strong>
+                        {result.prenom} {result.nom}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Classe :</span> {result.classe}
+                    </div>
+                    <div>
+                      <span className="text-muted-foreground">Payé :</span>{" "}
+                      {result.montant.toFixed(2)} €
+                    </div>
                   </div>
                 </div>
               </div>
