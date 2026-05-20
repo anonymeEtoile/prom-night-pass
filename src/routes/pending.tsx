@@ -26,12 +26,16 @@ function PendingPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Bonjour <strong>{user?.email}</strong>. Votre compte a bien été créé.
-            Un administrateur doit vous accorder l'accès depuis l'espace de gestion.
+            Bonjour <strong>{user?.email}</strong>. Votre compte a bien été créé. Un administrateur
+            doit vous accorder l'accès depuis l'espace de gestion.
           </p>
           <div className="flex gap-2">
-            <Button variant="outline" className="flex-1" onClick={refreshRole}>Vérifier</Button>
-            <Button variant="ghost" className="flex-1" onClick={signOut}>Se déconnecter</Button>
+            <Button variant="outline" className="flex-1" onClick={refreshRole}>
+              Vérifier
+            </Button>
+            <Button variant="ghost" className="flex-1" onClick={signOut}>
+              Se déconnecter
+            </Button>
           </div>
         </CardContent>
       </Card>

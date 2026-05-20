@@ -50,15 +50,15 @@ function ElevesPage() {
         qc.invalidateQueries({ queryKey: ["students"] });
       })
       .subscribe();
-    return () => { supabase.removeChannel(ch); };
+    return () => {
+      supabase.removeChannel(ch);
+    };
   }, [qc]);
 
   const filtered = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (!s) return students;
-    return students.filter((x) =>
-      `${x.nom} ${x.prenom} ${x.classe}`.toLowerCase().includes(s)
-    );
+    return students.filter((x) => `${x.nom} ${x.prenom} ${x.classe}`.toLowerCase().includes(s));
   }, [students, q]);
 
   const onDelete = async (id: string) => {
@@ -73,7 +73,9 @@ function ElevesPage() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold">Liste des élèves</h1>
-          <p className="text-sm text-muted-foreground">{filtered.length} résultat{filtered.length > 1 ? "s" : ""}</p>
+          <p className="text-sm text-muted-foreground">
+            {filtered.length} résultat{filtered.length > 1 ? "s" : ""}
+          </p>
         </div>
         <div className="relative w-full sm:max-w-sm">
           <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -126,7 +128,11 @@ function ElevesPage() {
                 </tr>
               ))}
               {filtered.length === 0 && (
-                <tr><td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">Aucun élève</td></tr>
+                <tr>
+                  <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground">
+                    Aucun élève
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -136,9 +142,7 @@ function ElevesPage() {
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {selected ? `${selected.prenom} ${selected.nom}` : ""}
-            </DialogTitle>
+            <DialogTitle>{selected ? `${selected.prenom} ${selected.nom}` : ""}</DialogTitle>
           </DialogHeader>
           {selected && (
             <div className="space-y-3">

@@ -20,7 +20,10 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold">404</h1>
         <p className="mt-2 text-sm text-muted-foreground">Page introuvable.</p>
-        <Link to="/" className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground">
+        <Link
+          to="/"
+          className="mt-6 inline-block rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground"
+        >
           Accueil
         </Link>
       </div>
@@ -37,7 +40,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="text-xl font-semibold">Une erreur est survenue</h1>
         <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-6 rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground"
         >
           Réessayer
@@ -53,7 +59,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Bal MMF — Billetterie" },
-      { name: "description", content: "Billetterie du bal de fin d'année — Lycée Marie Madeleine Fourcade" },
+      {
+        name: "description",
+        content: "Billetterie du bal de fin d'année — Lycée Marie Madeleine Fourcade",
+      },
       { name: "robots", content: "noindex, nofollow" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
@@ -67,14 +76,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }
 
 function Bootstrapper({ children }: { children: React.ReactNode }) {
-  useEffect(() => { setupAutoFlush(); }, []);
+  useEffect(() => {
+    setupAutoFlush();
+  }, []);
   return <>{children}</>;
 }
 

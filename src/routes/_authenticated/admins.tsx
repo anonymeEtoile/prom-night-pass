@@ -26,27 +26,43 @@ function AdminsPage() {
         supabase.from("profiles").select("*").order("created_at"),
         supabase.from("user_roles").select("user_id, role"),
       ]);
-      const roleSet = new Set((roles as Role[] | null ?? []).filter((r) => r.role === "super_admin").map((r) => r.user_id));
+      const roleSet = new Set(
+        ((roles as Role[] | null) ?? [])
+          .filter((r) => r.role === "super_admin")
+          .map((r) => r.user_id),
+      );
       return {
-        admins: (profiles as Profile[] | null ?? []).filter((p) => roleSet.has(p.id)),
-        pending: (profiles as Profile[] | null ?? []).filter((p) => !roleSet.has(p.id)),
+        admins: ((profiles as Profile[] | null) ?? []).filter((p) => roleSet.has(p.id)),
+        pending: ((profiles as Profile[] | null) ?? []).filter((p) => !roleSet.has(p.id)),
       };
     },
   });
 
   const grant = async (id: string) => {
-    const { error } = await supabase.from("user_roles").insert({ user_id: id, role: "super_admin" });
+    const { error } = await supabase
+      .from("user_roles")
+      .insert({ user_id: id, role: "super_admin" });
     if (error) toast.error(error.message);
-    else { toast.success("Statut administrateur accordé"); qc.invalidateQueries({ queryKey: ["admins-and-pending"] }); }
+    else {
+      toast.success("Statut administrateur accordé");
+      qc.invalidateQueries({ queryKey: ["admins-and-pending"] });
+    }
   };
 
   const revoke = async (id: string) => {
     if (id === user?.id) {
       if (!confirm("Vous êtes sur le point de retirer VOTRE propre statut. Confirmer ?")) return;
     } else if (!confirm("Retirer le statut administrateur de cette personne ?")) return;
-    const { error } = await supabase.from("user_roles").delete().eq("user_id", id).eq("role", "super_admin");
+    const { error } = await supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", id)
+      .eq("role", "super_admin");
     if (error) toast.error(error.message);
-    else { toast.success("Statut retiré"); qc.invalidateQueries({ queryKey: ["admins-and-pending"] }); }
+    else {
+      toast.success("Statut retiré");
+      qc.invalidateQueries({ queryKey: ["admins-and-pending"] });
+    }
   };
 
   return (
@@ -64,7 +80,9 @@ function AdminsPage() {
         </h2>
         <Card className="divide-y">
           {(data?.pending ?? []).length === 0 && (
-            <div className="p-6 text-center text-sm text-muted-foreground">Aucun compte en attente.</div>
+            <div className="p-6 text-center text-sm text-muted-foreground">
+              Aucun compte en attente.
+            </div>
           )}
           {data?.pending.map((p) => (
             <div key={p.id} className="flex items-center justify-between gap-3 p-4">

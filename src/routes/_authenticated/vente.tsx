@@ -27,7 +27,8 @@ function VentePage() {
   const [form, setForm] = useState({ nom: "", prenom: "", classe: "", montant_paye: "5" });
   const [busy, setBusy] = useState(false);
 
-  const reset = () => setForm({ nom: "", prenom: "", classe: form.classe, montant_paye: form.montant_paye });
+  const reset = () =>
+    setForm({ nom: "", prenom: "", classe: form.classe, montant_paye: form.montant_paye });
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,7 +73,8 @@ function VentePage() {
       <div>
         <h1 className="text-2xl font-semibold">Nouvelle vente</h1>
         <p className="text-sm text-muted-foreground">
-          Saisissez les informations de l'élève. Si le réseau est indisponible, les données sont conservées et envoyées automatiquement plus tard.
+          Saisissez les informations de l'élève. Si le réseau est indisponible, les données sont
+          conservées et envoyées automatiquement plus tard.
         </p>
       </div>
 
@@ -88,20 +90,44 @@ function VentePage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="prenom">Prénom</Label>
-                <Input id="prenom" required value={form.prenom} onChange={(e) => setForm({ ...form, prenom: e.target.value })} />
+                <Input
+                  id="prenom"
+                  required
+                  value={form.prenom}
+                  onChange={(e) => setForm({ ...form, prenom: e.target.value })}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="nom">Nom</Label>
-                <Input id="nom" required value={form.nom} onChange={(e) => setForm({ ...form, nom: e.target.value })} />
+                <Input
+                  id="nom"
+                  required
+                  value={form.nom}
+                  onChange={(e) => setForm({ ...form, nom: e.target.value })}
+                />
               </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="classe">Classe</Label>
-              <Input id="classe" required placeholder="ex: Terminale STMG 4" value={form.classe} onChange={(e) => setForm({ ...form, classe: e.target.value })} />
+              <Input
+                id="classe"
+                required
+                placeholder="ex: Terminale STMG 4"
+                value={form.classe}
+                onChange={(e) => setForm({ ...form, classe: e.target.value })}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="montant">Montant payé (€)</Label>
-              <Input id="montant" type="number" step="0.5" min="0" required value={form.montant_paye} onChange={(e) => setForm({ ...form, montant_paye: e.target.value })} />
+              <Input
+                id="montant"
+                type="number"
+                step="0.5"
+                min="0"
+                required
+                value={form.montant_paye}
+                onChange={(e) => setForm({ ...form, montant_paye: e.target.value })}
+              />
             </div>
             <Button type="submit" className="w-full" size="lg" disabled={busy}>
               {busy ? "Enregistrement…" : "Valider le paiement"}
